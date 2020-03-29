@@ -1,0 +1,29 @@
+
+@import url('https://fonts.googleapis.com/css?family=Chilanka&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,500&display=swap');
+.body{
+  height: 500px;
+	background-color: #fce392;
+}
+.heading{
+  padding-top: 5px;
+  background-color:#f2b052 ;	
+  height: 35px;
+  overflow: hidden;
+  font-family: 'Raleway', sans-serif;
+  
+  /* font-family: 'Chilanka', cursive; */
+  
+}
+
+.heading input{
+  background-color:#f2b052 ;
+  border: none;
+  outline: none;
+}
+.body textarea{
+  height: 500px;
+  background-color: #fce392;
+  border: none;
+  outline: none;
+}
