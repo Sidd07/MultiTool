@@ -6,25 +6,27 @@ const url = "mongodb://localhost:27017/StickyDB";
 
 
 const schema = Schema({
-    _id : String,
-   header : String,
-   body: String 
-   
-}, { collection: "StickyNote", timestamps: true })
+    selectedDate: String,
+    content:{
+        headingText: String,
+        bodyText: String
+    }
+    
+}, { collection: "StickyNoteDB", timestamps: false })
 
 
 let StickyNote = {};
-
+  
 StickyNote.getProductCollection = () => {
     return Mongoose.connect(url, { useNewUrlParser: true }).then((database) => {
-        return database.model('StickyNote', schema)
+        return database.model('StickyNoteDB', schema) 
     }).catch((error) => {
         console.log(error);
         
         let err = new Error("Could not connect to Database");
         err.status = 500;
         throw err;
-    })
+    })  
 }
 
 
