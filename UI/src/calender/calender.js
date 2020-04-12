@@ -18,17 +18,38 @@ class Calender extends Component {
         this.openModal = this.openModal.bind(this);
         this.afterOpenModal = this.afterOpenModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
+        this.refreshDate = this.refreshDate.bind(this)
+        this.showMonthView = this.showMonthView.bind(this)
+        this.selectMonth = this.selectMonth.bind(this)
+
         this.months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-        let month = ''
+        this.monthText = '';
+        this.optional = false
         this.date = new Date()
         this.currnetMonth = new Date().getMonth()
         this.months.forEach((element) => {
             if (this.months.indexOf(element) === this.currnetMonth) {
-                month = element
+                this.monthText = element
             }
         })
-        
-        this.state = { month: month, date: this.date, modalIsOpen: false,selectedDate:'' }
+
+        this.state = { month: this.monthText, date: this.date, modalIsOpen: false, selectedDate: '', monthView: false }
+    }
+    refreshDate = () => {
+        this.currnetMonth = new Date().getMonth()
+        this.setState(state => ({
+            month: this.monthText,
+            date: this.date,
+            monthView: false
+        }))
+      
+    }
+    showMonthView = () => {
+        console.log('im show month')
+        this.setState(state => ({
+            monthView: true,
+            month: this.monthText
+        }))
     }
 
     changeMonth = (arrow) => {
@@ -85,6 +106,27 @@ class Calender extends Component {
 
     }
 
+    selectMonth = (month) => {
+        this.currnetMonth = this.months.indexOf(month)   
+        if (this.monthText == month) {           
+            console.log( 'im select month',this.currnetMonth)
+            this.setState(state => ({
+                month:month,
+                date: new Date(),
+                monthView: false
+            }))
+            
+        }
+        else {      
+            this.setState(state => ({                
+                month: month,
+                date: new Date(`${month}/1/${this.state.date.getFullYear()}`),
+                monthView: false
+            }))
+
+        }
+    }
+
     changeYear = (arrow) => {
         if (arrow === 'right') {
             this.currnetMonth = 0
@@ -103,9 +145,9 @@ class Calender extends Component {
     }
 
 
-    openModal(date,month,year) {
+    openModal(date, month, year) {
 
-       console.log('im date',date,month,year)
+        console.log('im date', date, month, year)
         this.setState(state => ({ modalIsOpen: true, selectedDate: `${date}/${month}/${year}` }))
     }
 
@@ -115,23 +157,13 @@ class Calender extends Component {
     }
 
     closeModal() {
-        let data = {
-            "date": "31/03/2020",
-            "headingText": "HEading 2nd Data",
-            "BodyText": "body Text Data"
-          }
-        console.log('im closing modal')
         this.setState({ modalIsOpen: false });
-        axios.post('http://localhost:3200/users/addData',data).then(res => {
-            
-            console.log('imdata',res)
-          
-          })
     }
 
     data = () => {
         var calender = {};
         var now_time = this.state.date
+        console.log(now_time)
         var now_date = now_time.getDate();
         var now_year = now_time.getFullYear();
         var now_month = now_time.getMonth();
@@ -139,6 +171,7 @@ class Calender extends Component {
         var d = new Date(now_year, m, 0);
         calender.days_num = d.getDate();
 
+        console.log('im d get date ()', d.getDate())
 
         if (now_date !== 1) {
             var first_time = new Date(now_year, now_month, 1);
@@ -155,12 +188,12 @@ class Calender extends Component {
             for (var day = 0; day <= 6 && num_for <= calender.days_num; day++) {
                 if (day >= calender.first_day || flag) {
                     if (num_for === now_date && now_time.getMonth() === new Date().getMonth() && now_time.getFullYear() === new Date().getFullYear()) {
-                        days.push(<div className="item today" onClick={e=> this.openModal(e.target.innerText,m,now_year)}> {num_for}</div>);
+                        days.push(<div className="item today" onClick={e => this.openModal(e.target.innerText, m, now_year)}> {num_for}</div>);
                     } else {
                         if (day === 0 || day === 6) {
-                            days.push(<div className="item holiday"   id= 'selectedDate'  data-toggle="modal" data-target="#exampleModal" onClick={e=>this.openModal(e.target.innerText,m,now_year)} >{num_for}</div>);
+                            days.push(<div className="item holiday" id='selectedDate' data-toggle="modal" data-target="#exampleModal" onClick={e => this.openModal(e.target.innerText, m, now_year)} >{num_for}</div>);
                         } else {
-                            days.push(<div className="item "  onClick={e=> this.openModal(e.target.innerText,m,now_year)}> {num_for}</div>);
+                            days.push(<div className="item " onClick={e => this.openModal(e.target.innerText, m, now_year)}> {num_for}</div>);
                         }
                     }
 
@@ -187,11 +220,22 @@ class Calender extends Component {
                 <br />
                 {/* <center><h1>Hi, I'm Calender!</h1></center> */}
                 <br />
-                <CalenderUI data={this.data()} month={this.state.month} date={this.state.date} onClick={this.changeMonth} ></CalenderUI>
-                { this.state.modalIsOpen ?
-                <StickyNote isOpen={this.state.modalIsOpen}
-                    onAfterOpen={this.afterOpenModal}
-                    onRequestClose={this.closeModal} selectedDate = {this.state.selectedDate}></StickyNote> : null}
+                <CalenderUI data={this.data()}
+                    month={this.state.month}
+                    date={this.state.date}
+                    onClick={this.changeMonth}
+                    refreshDate={this.refreshDate}
+                    showMonthView={this.showMonthView}
+                    isMonthView={this.state.monthView}
+                    months={this.months}
+                    selectMonth={this.selectMonth}
+                ></CalenderUI>
+
+                {this.state.modalIsOpen ?
+                    <StickyNote isOpen={this.state.modalIsOpen}
+                        onAfterOpen={this.afterOpenModal}
+                        onRequestClose={this.closeModal} selectedDate={this.state.selectedDate}
+                    ></StickyNote> : null}
             </div>
         );
     }
