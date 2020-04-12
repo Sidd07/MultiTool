@@ -48,3 +48,26 @@
 .holiday{
   color:red
 }
+
+.months{
+  display: table-cell;
+    height: 73px;    
+    padding-top: 25px;
+    text-align: center;
+    border: 1px solid #f1f1f1
+}
+.months:hover{
+  border: 1px solid #387ec7;
+  background-color:#387ec7;
+  color:#ffffff
+}
+.active-month{  
+  border: 1px solid #0052c2;
+  background-color:#0052c2;
+  color:#ffffff
+}
+.active-month:hover{  
+  border: px solid #0a7ffd;
+  background-color:#0052c2;
+  color:#ffffff
+}
