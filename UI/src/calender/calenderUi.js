@@ -15,16 +15,16 @@ class calenderUI extends Component {
 
             <div className='row mt-1 mb-2'>
                 <div className='col-md-2'>
-                    <FontAwesomeIcon icon={faArrowCircleLeft} className='float-left mt-1'
+                    <FontAwesomeIcon icon={faArrowCircleLeft} className='cursor-pointer float-left mt-1'
                         onClick={() => this.props.onClick('left')}
 
                     />
                 </div>
                 <div className='col-md-8'>
                     <div className='row'>
-                        <div className={this.props.isMonthView ? 'col-md-8 offset-4 d-inline-flex' : 'col-md-8 offset-3 d-inline-flex'}>
+                        <div className={this.props.isMonthView ? 'cursor-pointer col-md-8 offset-4 d-inline-flex' : 'cursor-pointer col-md-8 offset-3 d-inline-flex'}>
                             <h6 className='mr-2' onClick={() => this.props.showMonthView()} > {this.props.isMonthView ? null : this.props.month} {this.props.date.getFullYear()}</h6>
-                            <FontAwesomeIcon icon={faSync} onClick={() => this.props.refreshDate()} />
+                            <FontAwesomeIcon icon={faSync} onClick={() => this.props.refreshDate()} className='cursor-pointer' />
 
                         </div>
 
@@ -32,7 +32,7 @@ class calenderUI extends Component {
                 </div>
                 <div className='col-md-2'>
                     <FontAwesomeIcon icon={faArrowCircleRight}
-                        className='float-right mt-1'
+                        className='float-right cursor-pointer mt-1'
                         onClick={() => this.props.onClick('right')} />
                 </div>
             </div>
